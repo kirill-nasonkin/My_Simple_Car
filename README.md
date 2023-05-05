@@ -1,2 +1,2 @@
 # my_simple_car
-Your own helper to take care of a car.
+Amazing helper tool to take care of your cars.
