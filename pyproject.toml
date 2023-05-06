@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "my-simple-car"
+version = "0.1.0"
+description = "Amazing service to take care of your car."
+authors = ["K_Nasonkin <sticheg2580@gmail.com>"]
+license = ""
+readme = "README.md"
+packages = [{include = "my_simple_car"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.95.1"}
+alembic = "^1.10.4"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
