@@ -2,15 +2,9 @@ import os
 from logging.config import fileConfig
 
 from alembic import context
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
-from app.core.config import (
-    POSTGRES_USER,
-    POSTGRES_PASSWORD,
-    POSTGRES_DB,
-    POSTGRES_SERVER,
-)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,10 +12,6 @@ config = context.config
 
 section = config.config_ini_section
 
-config.set_section_option(section, "POSTGRES_USER", POSTGRES_USER)
-config.set_section_option(section, "POSTGRES_PASSWORD", POSTGRES_PASSWORD)
-config.set_section_option(section, "POSTGRES_DB", POSTGRES_DB)
-config.set_section_option(section, "POSTGRES_SERVER", POSTGRES_SERVER)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -37,18 +27,19 @@ from app.db.base import Base  # noqa
 target_metadata = Base.metadata
 
 
+def get_url():
+    load_dotenv(verbose=True)
+    user = os.getenv("POSTGRES_USER", "postgres")
+    password = os.getenv("POSTGRES_PASSWORD", "")
+    server = os.getenv("POSTGRES_SERVER", "db")
+    db = os.getenv("POSTGRES_DB", "app")
+    return f"postgresql+asyncpg://{user}:{password}@{server}/{db}?async_fallback=True"
+
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
-
-# def get_url():
-#     user = os.getenv("POSTGRES_USER", "postgres")
-#     password = os.getenv("POSTGRES_PASSWORD", "")
-#     server = os.getenv("POSTGRES_SERVER", "db")
-#     db = os.getenv("POSTGRES_DB", "app")
-#     return f"postgresql+asyncpg://{user}:{password}@{server}/{db}?async_fallback=True"
 
 
 def run_migrations_offline() -> None:
@@ -63,7 +54,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     # noinspection PyTypeChecker
     context.configure(
         url=url,
@@ -83,8 +74,10 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    configuration = config.get_section(config.config_ini_section)
+    configuration["sqlalchemy.url"] = get_url()
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
