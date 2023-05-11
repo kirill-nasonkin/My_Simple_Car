@@ -868,6 +868,23 @@ files = [
 ]
 
 [[package]]
+name = "sqladmin"
+version = "0.10.3"
+description = "SQLAlchemy admin for FastAPI and Starlette"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "sqladmin-0.10.3-py3-none-any.whl", hash = "sha256:84592f68fe89a48db76edc70c7fd07e8d203966e5aedfebbdbbb15843cff0704"},
+    {file = "sqladmin-0.10.3.tar.gz", hash = "sha256:75703df630c35a954b91bac8476cafa8abc65c5aae39c1e7405c0d11b758e925"},
+]
+
+[package.dependencies]
+sqlalchemy = ">=1.4"
+starlette = {version = "*", extras = ["full"]}
+wtforms = ">=3,<4"
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.12"
 description = "Database Abstraction Library"
@@ -959,6 +976,11 @@ files = [
 
 [package.dependencies]
 anyio = ">=3.4.0,<5"
+httpx = {version = ">=0.22.0", optional = true, markers = "extra == \"full\""}
+itsdangerous = {version = "*", optional = true, markers = "extra == \"full\""}
+jinja2 = {version = "*", optional = true, markers = "extra == \"full\""}
+python-multipart = {version = "*", optional = true, markers = "extra == \"full\""}
+pyyaml = {version = "*", optional = true, markers = "extra == \"full\""}
 
 [package.extras]
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
@@ -1248,7 +1270,25 @@ files = [
     {file = "websockets-11.0.2.tar.gz", hash = "sha256:b1a69701eb98ed83dd099de4a686dc892c413d974fa31602bc00aca7cb988ac9"},
 ]
 
+[[package]]
+name = "wtforms"
+version = "3.0.1"
+description = "Form validation and rendering for Python web development."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "WTForms-3.0.1-py3-none-any.whl", hash = "sha256:837f2f0e0ca79481b92884962b914eba4e72b7a2daaf1f939c890ed0124b834b"},
+    {file = "WTForms-3.0.1.tar.gz", hash = "sha256:6b351bbb12dd58af57ffef05bc78425d08d1914e0fd68ee14143b7ade023c5bc"},
+]
+
+[package.dependencies]
+MarkupSafe = "*"
+
+[package.extras]
+email = ["email-validator"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7575c5dc937519267c9ff7409344203ff263ca207b9b17651def46cfd254eb6c"
+content-hash = "d47b358d327dee169be7e5d6c1260fe3182f6566d6d607004a631202826500a4"
