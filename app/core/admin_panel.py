@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from sqladmin import ModelView, Admin
+from sqladmin import Admin, ModelView
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.models.users import User
