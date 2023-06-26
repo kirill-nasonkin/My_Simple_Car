@@ -8,11 +8,11 @@ packages = [{include = "my_simple_car"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = {extras = ["all"], version = "^0.95.1"}
-sqlalchemy = "^2.0.12"
-alembic = "^1.10.4"
+fastapi = {extras = ["all"], version = "^0.98.0"}
+sqlalchemy = "^2.0.17"
+alembic = "^1.11.1"
 asyncpg = "^0.27.0"
-sqladmin = "^0.10.3"
+sqladmin = "^0.12.0"
 
 
 [tool.poetry.group.dev.dependencies]
