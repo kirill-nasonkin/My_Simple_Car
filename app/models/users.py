@@ -1,21 +1,21 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from datetime import datetime
+
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    TIMESTAMP,
+)
 
 from app.db.base_class import Base
 
 
-class User(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-
-    items = relationship("Item", back_populates="owner")
-
-
-class Item(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("user.id"))
-    owner = relationship("User", back_populates="items")
+class User(SQLAlchemyBaseUserTable[int], Base):
+    id = Column(Integer, primary_key=True)
+    username = Column(String, nullable=False)
+    registered_at = Column(TIMESTAMP, default=datetime.utcnow)
+    car_id = Column(Integer, nullable=True)
+    driver_license_id = Column(Integer, nullable=True)
+    insurance_id = Column(Integer, nullable=True)
+    document_id = Column(Integer, nullable=True)
