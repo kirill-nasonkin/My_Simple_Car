@@ -426,17 +426,32 @@ files = [
 [package.dependencies]
 email-validator = ">=1.1.0,<2.1"
 fastapi = ">=0.65.2"
+fastapi-users-db-sqlalchemy = {version = ">=4.0.0", optional = true, markers = "extra == \"sqlalchemy\""}
 makefun = ">=1.11.2,<2.0.0"
 passlib = {version = "1.7.4", extras = ["bcrypt"]}
 pyjwt = {version = "2.6.0", extras = ["crypto"]}
 python-multipart = "0.0.6"
-redis = {version = ">=4.3.3,<5.0.0", optional = true, markers = "extra == \"redis\""}
 
 [package.extras]
 beanie = ["fastapi-users-db-beanie (>=1.0.0)"]
 oauth = ["httpx-oauth (>=0.4,<0.12)"]
 redis = ["redis (>=4.3.3,<5.0.0)"]
 sqlalchemy = ["fastapi-users-db-sqlalchemy (>=4.0.0)"]
+
+[[package]]
+name = "fastapi-users-db-sqlalchemy"
+version = "5.0.0"
+description = "FastAPI Users database adapter for SQLAlchemy"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "fastapi_users_db_sqlalchemy-5.0.0-py3-none-any.whl", hash = "sha256:7c9965555e94335d432f82f555b523809e1c37ed3ccd6ee1c7c9c0ae3240ea85"},
+    {file = "fastapi_users_db_sqlalchemy-5.0.0.tar.gz", hash = "sha256:013c2800ce1cb5149acbd1d7eb8596e4aa7dd578395c40df951b666a121388c5"},
+]
+
+[package.dependencies]
+fastapi-users = ">=10.0.0"
+sqlalchemy = {version = ">=2.0.0,<2.1.0", extras = ["asyncio"]}
 
 [[package]]
 name = "flake8"
@@ -1175,7 +1190,7 @@ files = [
 ]
 
 [package.dependencies]
-greenlet = {version = "!=0.4.17", markers = "platform_machine == \"win32\" or platform_machine == \"WIN32\" or platform_machine == \"AMD64\" or platform_machine == \"amd64\" or platform_machine == \"x86_64\" or platform_machine == \"ppc64le\" or platform_machine == \"aarch64\""}
+greenlet = {version = "!=0.4.17", optional = true, markers = "platform_machine == \"win32\" or platform_machine == \"WIN32\" or platform_machine == \"AMD64\" or platform_machine == \"amd64\" or platform_machine == \"x86_64\" or platform_machine == \"ppc64le\" or platform_machine == \"aarch64\" or extra == \"asyncio\""}
 typing-extensions = ">=4.2.0"
 
 [package.extras]
@@ -1518,4 +1533,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c13314ef974e43761f3d86b2ec7eee4655548ce9cbe831960a2cef8e8dd19010"
+content-hash = "748df4aa222f1c958506d0feb05c1874a94d91e83a20381f0bbdd3e6dd566be4"
