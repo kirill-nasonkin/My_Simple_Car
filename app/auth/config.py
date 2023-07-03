@@ -7,7 +7,7 @@ from fastapi_users.authentication import (
 )
 
 from app.auth.manager import get_user_manager
-from app.core.config import settings
+from app.core.settings import settings
 from app.models.users import User
 
 cookie_transport = CookieTransport(
@@ -15,7 +15,7 @@ cookie_transport = CookieTransport(
     cookie_max_age=settings.ACCESS_TOKEN_EXPIRE_SECONDS,
 )
 
-redis = redis.asyncio.from_url("redis://localhost:6379", decode_responses=True)
+redis = redis.asyncio.from_url(settings.REDIS_SERVER, decode_responses=True)
 
 
 def get_redis_strategy() -> RedisStrategy:

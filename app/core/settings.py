@@ -13,6 +13,7 @@ from pydantic import (
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
+    PASSWORD_MIN_LENGTH: int = 8
     # 3600 seconds * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_SECONDS: int = 3600 * 24 * 8
 
@@ -47,6 +48,8 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
+
+    REDIS_SERVER: str
 
     # SMTP_HOST: Optional[str] = None
     # SMTP_PORT: Optional[int] = None

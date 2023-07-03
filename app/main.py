@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.auth.config import auth_backend, fastapi_users
 from app.core.admin_panel import setup_admin
-from app.core.config import settings
+from app.core.settings import settings
 from app.db.session import engine
 from app.schemas.users import UserCreate, UserRead, UserUpdate
 

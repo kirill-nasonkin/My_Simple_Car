@@ -8,7 +8,7 @@ from fastapi_users import (
 )
 
 from app.auth.utils import get_user_db
-from app.core.config import settings
+from app.core.settings import settings
 from app.models.users import User
 from app.schemas.users import UserCreate
 
@@ -20,7 +20,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def validate_password(
         self, password: str, user: Union[UserCreate, User]
     ) -> None:
-        if len(password) < 8:
+        if len(password) < settings.PASSWORD_MIN_LENGTH:
             raise InvalidPasswordException(
                 reason="Password should be at least 8 characters"
             )
