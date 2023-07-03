@@ -11,6 +11,8 @@ class UserAdmin(ModelView, model=User):
         User.email,
         User.username,
     ]
+    column_searchable_list = [User.username, User.email]
+    column_sortable_list = [User.id, User.username, User.email]
     icon = "fa-solid fa-user"
 
 
