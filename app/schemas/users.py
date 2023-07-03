@@ -14,21 +14,18 @@ class UserRead(schemas.BaseUser[int]):
     driver_license_id: Optional[int]
     insurance_id: Optional[int]
     document_id: Optional[int]
-    is_active: bool = True
-    is_superuser: bool = False
-    is_verified: bool = False
-
-    class Config:
-        orm_mode = True
+    is_active: Optional[bool] = True
+    is_superuser: Optional[bool] = False
+    is_verified: Optional[bool] = False
 
 
 class UserCreate(schemas.BaseUserCreate):
     username: str
     email: EmailStr
     password: str
-    is_active: bool = True
-    is_superuser: bool = False
-    is_verified: bool = False
+    is_active: Optional[bool] = True
+    is_superuser: Optional[bool] = False
+    is_verified: Optional[bool] = False
 
 
 class UserUpdate(schemas.BaseUserUpdate):
