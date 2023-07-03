@@ -11,6 +11,7 @@ class UserAdmin(ModelView, model=User):
         User.email,
         User.username,
     ]
+    icon = "fa-solid fa-user"
 
 
 def setup_admin(app: FastAPI, engine: AsyncEngine):
