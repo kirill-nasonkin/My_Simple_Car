@@ -13,7 +13,7 @@ from app.db.base_class import Base
 
 class User(SQLAlchemyBaseUserTable[int], Base):
     id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=False)
+    username = Column(String, nullable=False, unique=True)
     registered_at = Column(TIMESTAMP, default=datetime.utcnow)
     car_id = Column(Integer, nullable=True)
     driver_license_id = Column(Integer, nullable=True)
