@@ -1,10 +1,13 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 
 from sqlalchemy import Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from .users import User  # noqa: F401
 
 
 class Body(Base):
@@ -21,6 +24,9 @@ class Engine(Base):
     power: Mapped[Optional[int]] = mapped_column(default=volume * 68)
 
     cars: Mapped[List["Car"]] = relationship("Car", back_populates="engine")
+
+    def __repr__(self):
+        return f"Engine: {self.model} - {self.fuel_type} - {self.volume}"
 
 
 class Maintenance(Base):
@@ -50,3 +56,7 @@ class Car(Base):
     maintenances: Mapped[List["Maintenance"]] = relationship(
         back_populates="car"
     )
+    owner: Mapped["User"] = relationship(back_populates="cars")
+
+    def __repr__(self):
+        return f"Car: {self.brand}-{self.model}. Owner: {self.owner}"
