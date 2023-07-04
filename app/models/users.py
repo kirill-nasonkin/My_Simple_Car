@@ -1,21 +1,31 @@
 from datetime import datetime
+from typing import List, Optional, TYPE_CHECKING
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    TIMESTAMP,
-)
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base_class import Base
 
+if TYPE_CHECKING:
+    from .documents import Document, DriverLicense, Insurance  # noqa: F401
+
 
 class User(SQLAlchemyBaseUserTable[int], Base):
-    id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=False, unique=True)
-    registered_at = Column(TIMESTAMP, default=datetime.utcnow)
-    car_id = Column(Integer, nullable=True)
-    driver_license_id = Column(Integer, nullable=True)
-    insurance_id = Column(Integer, nullable=True)
-    document_id = Column(Integer, nullable=True)
+    username: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    registered_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    car_id: Mapped[Optional[int]]
+    driver_license_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("driverlicense.id")
+    )
+    insurance_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("insurance.id")
+    )
+    document_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("document.id")
+    )
+    driver_license: Mapped["DriverLicense"] = relationship(
+        back_populates="user"
+    )
+    insurance: Mapped[List["Insurance"]] = relationship(back_populates="user")
+    document: Mapped[List["Document"]] = relationship(back_populates="user")
