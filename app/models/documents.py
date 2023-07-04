@@ -21,9 +21,11 @@ class DriverLicense(Base, BaseDocument):
 
 class Insurance(Base, BaseDocument):
     insurer: Mapped[str] = mapped_column(String(255))
+
     user: Mapped["User"] = relationship(back_populates="insurance")
 
 
 class Document(Base, BaseDocument):
     title: Mapped[str] = mapped_column(String(255))
+
     user: Mapped["User"] = relationship(back_populates="document")

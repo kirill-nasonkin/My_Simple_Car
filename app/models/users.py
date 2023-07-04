@@ -24,6 +24,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     document_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("document.id")
     )
+
     driver_license: Mapped["DriverLicense"] = relationship(
         back_populates="user"
     )
