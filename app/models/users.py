@@ -9,12 +9,13 @@ from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .documents import Document, DriverLicense, Insurance  # noqa: F401
+    from .cars import Car
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):
     username: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     registered_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    car_id: Mapped[Optional[int]]
+    car_id: Mapped[Optional[int]] = mapped_column(ForeignKey("car.id"))
     driver_license_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("driverlicense.id")
     )
@@ -30,3 +31,4 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     )
     insurance: Mapped[List["Insurance"]] = relationship(back_populates="user")
     document: Mapped[List["Document"]] = relationship(back_populates="user")
+    cars: Mapped[List["Car"]] = relationship(back_populates="owner")
