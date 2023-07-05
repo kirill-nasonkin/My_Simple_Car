@@ -34,4 +34,4 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     cars: Mapped[List["Car"]] = relationship(back_populates="owner")
 
     def __repr__(self):
-        return f"User: {self.username=}, {self.email=}, {self.registered_at=}"
+        return f"User: {self.username}, {self.email}, {self.registered_at}"

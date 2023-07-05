@@ -31,7 +31,7 @@ class Engine(Base):
     def __repr__(self):
         return (
             f"Engine: {self.model}, {self.fuel_type}, "
-            f"{self.volume}, {self.power}"
+            f"{self.volume:.1f}, {self.power}"
         )
 
 
