@@ -1,5 +1,6 @@
 import secrets
 from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from pydantic import (
@@ -12,6 +13,8 @@ from pydantic import (
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent
+    STORAGE: Path = BASE_DIR / "static"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     PASSWORD_MIN_LENGTH: int = 8
     # 3600 seconds * 24 hours * 8 days = 8 days
