@@ -41,7 +41,7 @@ class Engine(Base):
     model: Mapped[str] = mapped_column(String(255), unique=True)
     fuel_type: Mapped[str] = mapped_column(String(255))
     volume: Mapped[float] = mapped_column(Float(1))
-    power: Mapped[Optional[int]] = mapped_column(default=volume * 68)
+    power: Mapped[Optional[int]]
 
     cars: Mapped[List["Car"]] = relationship("Car", back_populates="engine")
 
