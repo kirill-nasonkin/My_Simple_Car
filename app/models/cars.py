@@ -10,14 +10,26 @@ if TYPE_CHECKING:
     from .users import User  # noqa: F401
 
 
-class Body(Base):
+class Image(Base):
     title: Mapped[str] = mapped_column(String(255), unique=True)
-    default_body_avatar: Mapped[str] = mapped_column(String(255), unique=True)
+    url: Mapped[str] = mapped_column(String(2**16), unique=True)
 
-    cars: Mapped[List["Car"]] = relationship("Car", back_populates="body")
+    body: Mapped["Body"] = relationship(back_populates="image")
+    car: Mapped["Car"] = relationship(back_populates="avatar")
 
     def __repr__(self):
-        return f"Body: {self.title}"
+        return f"Image: {self.title}, {self.title[:15]}"
+
+
+class Body(Base):
+    title: Mapped[str] = mapped_column(String(255), unique=True)
+    image_id: Mapped[Image] = mapped_column(ForeignKey("image.id"))
+
+    cars: Mapped[List["Car"]] = relationship("Car", back_populates="body")
+    image: Mapped["Image"] = relationship("Image", back_populates="body")
+
+    def __repr__(self):
+        return f"Body: {self.title}, {self.image!r}"
 
 
 class Engine(Base):
@@ -49,7 +61,7 @@ class Maintenance(Base):
 
 
 class Car(Base):
-    avatar: Mapped[str] = mapped_column(String(255))
+    image_id: Mapped[Optional[int]] = mapped_column(ForeignKey("image.id"))
     vin: Mapped[str] = mapped_column(String(17), unique=True)
     year_built: Mapped[int]
     brand: Mapped[str] = mapped_column(String(255))
@@ -60,6 +72,7 @@ class Car(Base):
     body_id: Mapped[int] = mapped_column(ForeignKey("body.id"))
     engine_id: Mapped[int] = mapped_column(ForeignKey("engine.id"))
 
+    avatar: Mapped["Image"] = relationship(back_populates="car")
     body: Mapped["Body"] = relationship(back_populates="cars")
     engine: Mapped["Engine"] = relationship(back_populates="cars")
     maintenances: Mapped[List["Maintenance"]] = relationship(
