@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class Image(Base):
     title: Mapped[str] = mapped_column(String(255), unique=True)
-    file = mapped_column(
+    file: Mapped[str] = mapped_column(
         FileType(storage=FileSystemStorage(path=settings.STORAGE))
     )
 
