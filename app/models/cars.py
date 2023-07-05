@@ -16,6 +16,9 @@ class Body(Base):
 
     cars: Mapped[List["Car"]] = relationship("Car", back_populates="body")
 
+    def __repr__(self):
+        return f"Body: {self.title}"
+
 
 class Engine(Base):
     model: Mapped[str] = mapped_column(String(255), unique=True)
@@ -26,7 +29,10 @@ class Engine(Base):
     cars: Mapped[List["Car"]] = relationship("Car", back_populates="engine")
 
     def __repr__(self):
-        return f"Engine: {self.model} - {self.fuel_type} - {self.volume}"
+        return (
+            f"Engine: {self.model}, {self.fuel_type}, "
+            f"{self.volume}, {self.power}"
+        )
 
 
 class Maintenance(Base):
@@ -37,6 +43,9 @@ class Maintenance(Base):
     car_id: Mapped[int] = mapped_column(ForeignKey("car.id"))
 
     car: Mapped["Car"] = relationship("Car", back_populates="maintenances")
+
+    def __repr__(self):
+        return f"Maintenance: {self.title}, {self.date}. Car: {self.car!r}"
 
 
 class Car(Base):
@@ -59,4 +68,4 @@ class Car(Base):
     owner: Mapped["User"] = relationship(back_populates="cars")
 
     def __repr__(self):
-        return f"Car: {self.brand}-{self.model}. Owner: {self.owner}"
+        return f"Car: {self.brand}-{self.model}. Owner: {self.owner!r}"

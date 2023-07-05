@@ -32,3 +32,6 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     insurance: Mapped[List["Insurance"]] = relationship(back_populates="user")
     document: Mapped[List["Document"]] = relationship(back_populates="user")
     cars: Mapped[List["Car"]] = relationship(back_populates="owner")
+
+    def __repr__(self):
+        return f"User: {self.username=}, {self.email=}, {self.registered_at=}"
