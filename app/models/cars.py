@@ -10,7 +10,7 @@ from app.core.settings import settings
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .users import User  # noqa: F401
+    from .users import User
 
 
 class Image(Base):
