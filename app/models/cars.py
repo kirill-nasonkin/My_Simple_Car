@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from fastapi_storages import FileSystemStorage
-from fastapi_storages.integrations.sqlalchemy import FileType
+from fastapi_storages.integrations.sqlalchemy import FileType, ImageType
 from sqlalchemy import Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -15,9 +15,7 @@ if TYPE_CHECKING:
 
 class Image(Base):
     title: Mapped[str] = mapped_column(String(255), unique=True)
-    file: Mapped[str] = mapped_column(
-        FileType(storage=FileSystemStorage(path=settings.STORAGE))
-    )
+    file: Mapped[str] = mapped_column(ImageType(storage=settings.STORAGE))
 
     body: Mapped["Body"] = relationship(back_populates="image")
     car: Mapped["Car"] = relationship(back_populates="image")

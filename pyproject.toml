@@ -17,6 +17,7 @@ redis = "^4.6.0"
 fastapi-admin = "^1.0.4"
 fastapi-storages = "^0.1.0"
 sqladmin = "^0.13.0"
+pillow = "^10.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
