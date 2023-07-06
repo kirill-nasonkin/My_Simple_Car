@@ -27,40 +27,40 @@ class UserAdmin(ModelView, model=User):
 
 
 class DriverLicenseAdmin(ModelView, model=DriverLicense):
-    column_list = "__all__"
-    column_searchable_list = [DriverLicense.user]
-    column_sortable_list = [
+    column_list = [
         DriverLicense.id,
+        DriverLicense.user,
         DriverLicense.start_date,
         DriverLicense.exp_date,
-        DriverLicense.user,
     ]
+    column_searchable_list = [DriverLicense.user]
+    column_sortable_list = column_list
     icon = "fa-solid fa-id-card"
 
 
 class InsuranceAdmin(ModelView, model=Insurance):
-    column_list = "__all__"
-    column_searchable_list = [Insurance.user, Insurance.insurer]
-    column_sortable_list = [
+    column_list = [
         Insurance.id,
         Insurance.insurer,
+        Insurance.user,
         Insurance.start_date,
         Insurance.exp_date,
-        Insurance.user,
     ]
+    column_searchable_list = [Insurance.user, Insurance.insurer]
+    column_sortable_list = column_list
     icon = "fa-solid fa-file-invoice"
 
 
 class DocumentAdmin(ModelView, model=Document):
-    column_list = "__all__"
-    column_searchable_list = [Document.user, Document.title]
-    column_sortable_list = [
+    column_list = [
         Document.id,
         Document.title,
+        Document.user,
         Document.start_date,
         Document.exp_date,
-        Document.user,
     ]
+    column_searchable_list = [Document.user, Document.title]
+    column_sortable_list = column_list
     icon = "fa-sharp fa-solid fa-file-contract"
 
 
