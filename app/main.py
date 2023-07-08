@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.config import auth_backend, fastapi_users
 from app.core.admin_panel import setup_admin
 from app.core.settings import settings
-from app.db.session import engine
+from app.crud import crud_image
+from app.db.session import engine, get_async_session
 from app.schemas.users import UserCreate, UserRead, UserUpdate
 
 app = FastAPI(
@@ -35,3 +37,11 @@ app.include_router(
     prefix="/users",
     tags=["Users"],
 )
+
+
+@app.get("/image", tags=["image"])
+async def get_image(
+    id: int, session: AsyncSession = Depends(get_async_session)
+):
+    image = await crud_image.get(session, id)
+    return {"image": image}
