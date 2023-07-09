@@ -1,7 +1,8 @@
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, Sequence, TypeVar
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.base_class import Base
@@ -29,13 +30,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     async def get_multi(
         self, session: AsyncSession, *, skip: int = 0, limit: int = 100
-    ) -> list[ModelType]:
-        return await session.query(self.model).offset(skip).limit(limit).all()
+    ) -> Sequence[ModelType | None]:
+        return (
+            await session.scalars(select(self.model).offset(skip).limit(limit))
+        ).all()
 
     async def create(
-        self, session: AsyncSession, *, obj_in: CreateSchemaType
+        self, session: AsyncSession, *, create_schema: CreateSchemaType
     ) -> ModelType:
-        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data = jsonable_encoder(create_schema)
         db_obj = self.model(**obj_in_data)
         session.add(db_obj)
         await session.commit()
@@ -47,13 +50,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         session: AsyncSession,
         *,
         db_obj: ModelType,
-        obj_in: UpdateSchemaType | dict[str, Any]
+        update_schema: UpdateSchemaType | dict[str, Any]
     ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
+        update_data = update_schema.dict(exclude_unset=True)
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
