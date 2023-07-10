@@ -6,7 +6,6 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 class UserBase(BaseModel):
     email: EmailStr | None = None
     full_name: str | None = None
-    registered_at: datetime | None
     is_active: bool | None = True
     is_superuser: bool = False
 
@@ -22,7 +21,9 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     model_config = ConfigDict(from_attributes=True)
+
     id: int | None = None
+    registered_at: datetime
 
 
 class UserRead(UserInDBBase):
