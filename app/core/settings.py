@@ -14,6 +14,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
     API_V1_STR: str = "/api/v1"
+    USERS_OPEN_REGISTRATION: bool = True
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
     STORAGE: FileSystemStorage = FileSystemStorage(
         path=str(BASE_DIR / "static")
