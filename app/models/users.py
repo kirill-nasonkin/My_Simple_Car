@@ -12,16 +12,14 @@ if TYPE_CHECKING:
 
 
 class User(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     email: Mapped[str] = mapped_column(
         String(length=320), unique=True, index=True
     )
-    username: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    full_name: Mapped[str | None] = mapped_column(String(255), index=True)
     hashed_password: Mapped[str] = mapped_column(String(length=1024))
     registered_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     is_active: Mapped[bool] = mapped_column(default=True)
     is_superuser: Mapped[bool] = mapped_column(default=False)
-    is_verified: Mapped[bool] = mapped_column(default=False)
 
     driver_license: Mapped["DriverLicense"] = relationship(
         back_populates="user", cascade="all, delete"
@@ -38,6 +36,6 @@ class User(Base):
 
     def __repr__(self):
         return (
-            f"User: id={self.id}, username={self.username}, "
+            f"User: id={self.id}, username={self.full_name}, "
             f"email={self.email}"
         )
