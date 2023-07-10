@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class UserBase(BaseModel):
@@ -21,10 +21,8 @@ class UserUpdate(UserBase):
 
 
 class UserInDBBase(UserBase):
+    model_config = ConfigDict(from_attributes=True)
     id: int | None = None
-
-    class Config:
-        orm_mode = True
 
 
 class UserRead(UserInDBBase):
