@@ -27,7 +27,7 @@ class User(Base):
     insurance: Mapped[list["Insurance"]] = relationship(
         back_populates="user", cascade="all, delete"
     )
-    document: Mapped[list["Document"]] = relationship(
+    documents: Mapped[list["Document"]] = relationship(
         back_populates="user", cascade="all, delete"
     )
     cars: Mapped[list["Car"]] = relationship(

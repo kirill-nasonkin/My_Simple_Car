@@ -50,7 +50,7 @@ class Document(Base, BaseDocument):
         ForeignKey("user.id", ondelete="CASCADE")
     )
 
-    user: Mapped["User"] = relationship(back_populates="document")
+    user: Mapped["User"] = relationship(back_populates="documents")
 
     def __repr__(self):
         return (
