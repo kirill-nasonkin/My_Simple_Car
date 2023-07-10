@@ -5,14 +5,18 @@ from pathlib import Path
 from fastapi_storages import FileSystemStorage
 from pydantic import (
     AnyHttpUrl,
+    EmailStr,
     PostgresDsn,
     field_validator,
 )
+from pydantic_core.core_schema import FieldValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
+
+    PROJECT_NAME: str = "MY_SIMPLE_CAR"
     API_V1_STR: str = "/api/v1"
     USERS_OPEN_REGISTRATION: bool = True
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
@@ -44,10 +48,26 @@ class Settings(BaseSettings):
 
     REDIS_SERVER: str
 
-    SMTP_HOST: str | None = None
+    # EMAILS
+    SMTP_TLS: bool = True
     SMTP_PORT: int | None = None
-    # SMTP_USER: Optional[str] = None
-    # SMTP_PASSWORD: Optional[str] = None
+    SMTP_HOST: str | None = None
+    SMTP_USER: str | None = None
+    SMTP_PASSWORD: str | None = None
+    EMAILS_FROM_EMAIL: EmailStr | None = None
+    EMAILS_FROM_NAME: str | None = None
+
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
+    EMAIL_TEMPLATES_DIR: str = str(BASE_DIR / "email-templates" / "build")
+    EMAILS_ENABLED: bool = False
+
+    @field_validator("EMAILS_ENABLED", mode="before")
+    def get_emails_enabled(cls, v, info: FieldValidationInfo) -> bool:
+        return bool(
+            info.data.get("SMTP_HOST")
+            and info.data.get("SMTP_PORT")
+            and info.data.get("EMAILS_FROM_EMAIL")
+        )
 
 
 @lru_cache
@@ -56,3 +76,4 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
+print(settings.EMAILS_ENABLED, "\n", settings.EMAIL_TEMPLATES_DIR)
