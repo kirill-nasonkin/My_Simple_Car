@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
+from app.db.session import get_async_session
 from .endpoints import engines
-from ...db.session import get_async_session
 
 api_router = APIRouter()
 
