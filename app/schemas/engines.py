@@ -14,7 +14,7 @@ class EngineRead(BaseModel):
     fuel_type: FuelTypeName
     volume: float
     power: int
-    cars: list = []
+    # cars: list = []
 
     class Config:
         orm_mode = True
