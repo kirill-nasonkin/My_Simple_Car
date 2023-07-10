@@ -1,13 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from app.db.session import get_async_session
-from .endpoints import engines
+from .endpoints import engines, users
 
 api_router = APIRouter()
 
-api_router.include_router(
-    engines.router,
-    prefix="/engines",
-    tags=["Engines"],
-    dependencies=[Depends(get_async_session)],
-)
+api_router.include_router(users.router, prefix="/users", tags=["Users"])
+api_router.include_router(engines.router, prefix="/engines", tags=["Engines"])
