@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class FuelTypeName(str, Enum):
@@ -9,15 +9,13 @@ class FuelTypeName(str, Enum):
 
 
 class EngineRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     model: str
     fuel_type: FuelTypeName
     volume: float
     power: int
     # cars: list = []
-
-    class Config:
-        orm_mode = True
 
 
 class EngineCreate(BaseModel):
