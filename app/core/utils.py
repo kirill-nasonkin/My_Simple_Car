@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import emails
 from emails.template import JinjaTemplate
@@ -53,8 +53,11 @@ def send_test_email(email_to: str) -> None:
 def send_reset_password_email(email_to: str, email: str, token: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
+
+    # todo check path and settings and async way
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "reset_password.html") as f:
         template_str = f.read()
+
     server_host = settings.SERVER_HOST
     link = f"{server_host}/reset-password?token={token}"
     send_email(
@@ -106,7 +109,7 @@ def generate_password_reset_token(email: str) -> str:
     return encoded_jwt
 
 
-def verify_password_reset_token(token: str) -> Optional[str]:
+def verify_password_reset_token(token: str) -> str | None:
     try:
         decoded_token = jwt.decode(
             token, settings.SECRET_KEY, algorithms=["HS256"]
