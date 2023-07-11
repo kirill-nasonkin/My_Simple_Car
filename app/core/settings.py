@@ -76,4 +76,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-print(settings.EMAILS_ENABLED, "\n", settings.EMAIL_TEMPLATES_DIR)
