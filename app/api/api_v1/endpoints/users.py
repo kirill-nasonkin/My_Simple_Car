@@ -95,7 +95,7 @@ async def create_user_open(
     *,
     session: AsyncSession = Depends(get_async_session),
     email: EmailStr = Body(...),
-    password: str = Body(...),
+    password: str = Body(..., min_length=settings.PASSWORD_MIN_LENGTH),
     full_name: str = Body(None),
 ) -> Any:
     """

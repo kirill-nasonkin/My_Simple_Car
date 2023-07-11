@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     # SECURITY
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALGORITHM: str = "HS256"
-    PASSWORD_MIN_LENGTH: int = 8  # todo check for usage or delete
+    PASSWORD_MIN_LENGTH: int = 8
     # 3600 seconds * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_SECONDS: int = 3600 * 24 * 8
     USERS_OPEN_REGISTRATION: bool = True
