@@ -9,14 +9,14 @@ from app.core.settings import settings
 from app.db.session import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
-reusable_oauth2 = OAuth2PasswordBearer(
+oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
 )
 
 
 async def get_current_user(
     db: AsyncSession = Depends(get_async_session),
-    token: str = Depends(reusable_oauth2),
+    token: str = Depends(oauth2_scheme),
 ) -> models.User:
     try:
         payload = jwt.decode(
