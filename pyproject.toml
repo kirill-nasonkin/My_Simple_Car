@@ -4,11 +4,11 @@ version = "0.1.0"
 description = "Amazing service to take care of your car."
 authors = ["K_Nasonkin <sticheg2580@gmail.com>"]
 readme = "README.md"
-packages = [{include = "my_simple_car"}]
+packages = [{ include = "my_simple_car" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = {extras = ["all"], version = "^0.100.0"}
+fastapi = { extras = ["all"], version = "^0.100.0" }
 sqlalchemy = "^2.0.17"
 alembic = "^1.11.1"
 asyncpg = "^0.28.0"
@@ -17,8 +17,8 @@ fastapi-admin = "^1.0.4"
 fastapi-storages = "^0.1.0"
 sqladmin = "^0.13.0"
 pillow = "^10.0.0"
-python-jose = "^3.3.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = { extras = ["cryptography"], version = "^3.3.0" }
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
 emails = "^0.6"
 
 
