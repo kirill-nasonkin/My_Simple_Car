@@ -12,7 +12,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     email: EmailStr
-    password: str  # todo validate password
+    password: str
 
 
 class UserUpdate(UserBase):
