@@ -18,34 +18,32 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "MY_SIMPLE_CAR"
     API_V1_STR: str = "/api/v1"
-    USERS_OPEN_REGISTRATION: bool = True
+
+    # DIRS
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
     STORAGE: FileSystemStorage = FileSystemStorage(
         path=str(BASE_DIR / "static")
     )
+
+    # SECURITY
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    PASSWORD_MIN_LENGTH: int = 8
+    ALGORITHM: str = "HS256"
+    PASSWORD_MIN_LENGTH: int = 8  # todo check for usage or delete
     # 3600 seconds * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_SECONDS: int = 3600 * 24 * 8
-
-    # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
+    USERS_OPEN_REGISTRATION: bool = True
+    # BACKEND_CORS_ORIGINS - a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200"]'
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
 
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
-    def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
-
+    # DATABASE
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: PostgresDsn | None = None
 
+    # REDIS
     REDIS_SERVER: str
 
     # EMAILS
@@ -56,11 +54,11 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str | None = None
     EMAILS_FROM_EMAIL: EmailStr | None = None
     EMAILS_FROM_NAME: str | None = None
-
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
-    EMAIL_TEMPLATES_DIR: str = str(BASE_DIR / "email-templates" / "build")
     EMAILS_ENABLED: bool = False
+    EMAIL_TEMPLATES_DIR: str = str(BASE_DIR / "email-templates" / "build")
 
+    # VALIDATORS
     @field_validator("EMAILS_ENABLED", mode="before")
     def get_emails_enabled(cls, v, info: FieldValidationInfo) -> bool:
         return bool(
@@ -68,6 +66,14 @@ class Settings(BaseSettings):
             and info.data.get("SMTP_PORT")
             and info.data.get("EMAILS_FROM_EMAIL")
         )
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
+        if isinstance(v, str) and not v.startswith("["):
+            return [i.strip() for i in v.split(",")]
+        elif isinstance(v, (list, str)):
+            return v
+        raise ValueError(v)
 
 
 @lru_cache

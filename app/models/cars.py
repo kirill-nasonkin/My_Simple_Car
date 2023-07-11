@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from fastapi_storages import FileSystemStorage
-from fastapi_storages.integrations.sqlalchemy import FileType, ImageType
+from fastapi_storages.integrations.sqlalchemy import ImageType
 from sqlalchemy import Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
