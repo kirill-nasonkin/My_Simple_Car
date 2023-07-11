@@ -8,14 +8,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app import crud, models, schemas
 from app.api import deps
 from app.core import security
-from app.core.settings import settings
 from app.core.security import get_password_hash
+from app.core.settings import settings
 from app.core.utils import (
     generate_password_reset_token,
     send_reset_password_email,
     verify_password_reset_token,
 )
-
 from app.db.session import get_async_session
 
 router = APIRouter()
@@ -39,7 +38,7 @@ async def login_access_token(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_SECONDS  # todo
+        seconds=settings.ACCESS_TOKEN_EXPIRE_SECONDS
     )
     return {
         "access_token": security.create_access_token(
@@ -50,7 +49,7 @@ async def login_access_token(
 
 
 @router.post("/login/test-token", response_model=schemas.UserRead)
-async def test_token(  # todo check async
+async def test_token(
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """
