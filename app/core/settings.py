@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALGORITHM: str = "HS256"
     PASSWORD_MIN_LENGTH: int = 8
-    # 3600 seconds * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_SECONDS: int = 3600 * 24 * 8
+    # 60 minutes * 24 hours * 8 days = 8 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     USERS_OPEN_REGISTRATION: bool = True
     # BACKEND_CORS_ORIGINS - a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200"]'
