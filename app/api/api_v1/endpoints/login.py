@@ -81,7 +81,7 @@ async def recover_password(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="The user with this username does not exist in the system.",
+            detail="The user with this email does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
     send_reset_password_email(

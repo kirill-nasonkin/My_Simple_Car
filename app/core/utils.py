@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-import emails
+from emails import Message
 from emails.template import JinjaTemplate
 from jose import jwt
 
@@ -21,7 +21,7 @@ def send_email(
     assert (
         settings.EMAILS_ENABLED
     ), "no provided configuration for email variables"
-    message = emails.Message(
+    message = Message(
         subject=JinjaTemplate(subject_template),
         html=JinjaTemplate(html_template),
         mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
@@ -38,8 +38,7 @@ def send_email(
 
 
 def send_test_email(email_to: str) -> None:
-    project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - Test email"
+    subject = f"{settings.PROJECT_NAME} - Test email"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "test_email.html") as f:
         template_str = f.read()
     send_email(

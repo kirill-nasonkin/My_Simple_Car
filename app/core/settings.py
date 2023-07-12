@@ -15,8 +15,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
 
-    PROJECT_NAME: str = "MY_SIMPLE_CAR"
+    PROJECT_NAME: str = "My Simple Car"
     API_V1_STR: str = "/api/v1"
+    SERVER_HOST: str = "blabla_my_future_domain"  # emails
 
     # DIRS
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
