@@ -1,17 +1,12 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
-
-from app import crud, models, schemas
-from app.core import security
-from app.core.settings import settings
-from app.db.session import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
-)
+from app import crud, models, schemas
+from app.core.security import oauth2_scheme
+from app.core.settings import settings
+from app.db.session import get_async_session
 
 
 async def get_current_user(
@@ -30,7 +25,9 @@ async def get_current_user(
         )
     user = await crud.user.get(db, id=token_data.sub)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return user
 
 
@@ -38,7 +35,9 @@ def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not crud.user.is_active(current_user):
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Inactive user"
+        )
     return current_user
 
 
@@ -47,6 +46,7 @@ def get_current_active_superuser(
 ) -> models.User:
     if not crud.user.is_superuser(current_user):
         raise HTTPException(
-            status_code=400, detail="The user doesn't have enough privileges"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The user doesn't have enough privileges",
         )
     return current_user
