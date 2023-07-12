@@ -1,4 +1,3 @@
-import secrets
 from functools import lru_cache
 from pathlib import Path
 
@@ -26,7 +25,7 @@ class Settings(BaseSettings):
     )
 
     # SECURITY
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    SECRET_KEY: str
     ALGORITHM: str = "HS256"
     PASSWORD_MIN_LENGTH: int = 8
     # 60 minutes * 24 hours * 8 days = 8 days
