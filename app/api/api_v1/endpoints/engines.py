@@ -22,7 +22,7 @@ async def read_engines(
 
 
 @router.get("/{engine_id}", response_model=schemas.EngineRead)
-async def read_engine_by_id(
+async def read_engine(
     engine_id: int,
     session: AsyncSession = Depends(get_async_session),
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -48,8 +48,48 @@ async def create_engine(
     if engine:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This model of engine already exists."
+            detail="This model of engine already exists.",
         )
     engine = await crud_engine.create(session, create_schema=engine_in)
     return engine
 
+
+@router.put("/{engine_id}", response_model=schemas.EngineRead)
+async def update_engine(
+    *,
+    session: AsyncSession = Depends(get_async_session),
+    engine_id: int,
+    engine_in: schemas.EngineUpdate,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """Update engine by the ID."""
+    engine = await crud_engine.get(session, id=engine_id)
+    if not engine:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Engine with id={engine_id} doesn't exist.",
+        )
+    engine = await crud_engine.update(
+        session, db_obj=engine, update_schema=engine_in
+    )
+    return engine
+
+
+@router.delete("/{id}", response_model=schemas.EngineRead)
+async def delete_engine(
+    *,
+    session: AsyncSession = Depends(get_async_session),
+    engine_id: int,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Delete engine by the ID.
+    """
+    engine = crud_engine.get(session, id=engine_id)
+    if not engine:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Engine with id={engine_id} doesn't exist.",
+        )
+    engine = await crud_engine.remove(session, id=engine_id)
+    return engine
