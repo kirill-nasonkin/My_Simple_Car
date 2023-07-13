@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, condecimal, field_validator
 
 
 class FuelTypeName(str, Enum):
@@ -13,20 +13,27 @@ class EngineRead(BaseModel):
     id: int
     model: str
     fuel_type: FuelTypeName
-    volume: float
+    volume: str
     power: int
-    # cars: list = []
 
 
 class EngineCreate(BaseModel):
     model: str
     fuel_type: FuelTypeName
-    volume: float
+    volume: condecimal(gt=0, decimal_places=1)
     power: int = 100
 
+    @field_validator("model")
+    def capitalize_model(cls, v: str):
+        return v.upper()
 
-class EngineUpdate(BaseModel):
+    @field_validator("volume")
+    def get_volume_string_value(cls, v: str):
+        return str(float(v))
+
+
+class EngineUpdate(EngineCreate):
     model: str | None
     fuel_type: FuelTypeName | None
-    volume: float | None
+    volume: condecimal(gt=0, decimal_places=1) | None
     power: int | None
