@@ -20,9 +20,7 @@ async def read_users(
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
-    """
-    Retrieve users.
-    """
+    """Retrieve users."""
     users = await crud.user.get_multi(session, skip=skip, limit=limit)
     return users
 
@@ -34,9 +32,7 @@ async def create_user(
     user_in: schemas.UserCreate,
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
-    """
-    Create new user. For superuser use only.
-    """
+    """Create new user. For superuser use only."""
     user = await crud.user.get_by_email(session, email=user_in.email)
     if user:
         raise HTTPException(
@@ -63,9 +59,7 @@ async def update_user_me(
     email: EmailStr = Body(None),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
-    """
-    User self update.
-    """
+    """User self update."""
     current_user_data = jsonable_encoder(current_user)
     user_in = schemas.UserUpdate(**current_user_data)
     if password is not None:
@@ -85,9 +79,7 @@ async def read_user_me(
     session: AsyncSession = Depends(get_async_session),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
-    """
-    Get current user.
-    """
+    """Get current user."""
     return current_user
 
 
@@ -126,9 +118,7 @@ async def read_user_by_id(
     current_user: models.User = Depends(deps.get_current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ) -> Any:
-    """
-    Get specific user by the ID.
-    """
+    """Get specific user by the ID."""
     user = await crud.user.get(session, id=user_id)
     if user == current_user:
         return user
@@ -147,9 +137,7 @@ async def update_user(
     user_in: schemas.UserUpdate,
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
-    """
-    Update specific user with the ID provided.
-    """
+    """Update specific user with the ID provided."""
     user = await crud.user.get(session, id=user_id)
     if not user:
         raise HTTPException(
