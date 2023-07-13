@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,7 +36,7 @@ async def create_user(
     user = await crud.user.get_by_email(session, email=user_in.email)
     if user:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="The user with this username already exists in the system.",
         )
     user = await crud.user.create(session, create_schema=user_in)
@@ -96,13 +96,13 @@ async def create_user_open(
     """
     if not settings.USERS_OPEN_REGISTRATION:
         raise HTTPException(
-            status_code=403,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Open user registration is forbidden on this server",
         )
     user = await crud.user.get_by_email(session, email=email)
     if user:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="The user with this username already exists in the system",
         )
     user_in = schemas.UserCreate(
@@ -124,7 +124,8 @@ async def read_user_by_id(
         return user
     if not crud.user.is_superuser(current_user):
         raise HTTPException(
-            status_code=400, detail="The user doesn't have enough privileges"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The user doesn't have enough privileges",
         )
     return user
 
@@ -141,7 +142,7 @@ async def update_user(
     user = await crud.user.get(session, id=user_id)
     if not user:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The user with this username does not exist in the system",
         )
     user = await crud.user.update(session, db_obj=user, update_schema=user_in)
