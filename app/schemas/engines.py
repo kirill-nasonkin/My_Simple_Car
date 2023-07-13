@@ -33,7 +33,7 @@ class EngineCreate(BaseModel):
 
 
 class EngineUpdate(EngineCreate):
-    model: str | None
-    fuel_type: FuelTypeName | None
-    volume: condecimal(gt=0, decimal_places=1) | None
-    power: int | None
+    model: str | None = None
+    fuel_type: FuelTypeName | None = None
+    volume: condecimal(gt=0, decimal_places=1) | None = None
+    power: int | None = None
