@@ -35,7 +35,7 @@ async def create_user(
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Create new user.
+    Create new user. For superuser use only.
     """
     user = await crud.user.get_by_email(session, email=user_in.email)
     if user:
@@ -44,6 +44,7 @@ async def create_user(
             detail="The user with this username already exists in the system.",
         )
     user = await crud.user.create(session, create_schema=user_in)
+    # todo check whether to leave
     # if settings.EMAILS_ENABLED and user_in.email:
     #     send_new_account_email(
     #         email_to=user_in.email,
@@ -63,7 +64,7 @@ async def update_user_me(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Update own user.
+    User self update.
     """
     current_user_data = jsonable_encoder(current_user)
     user_in = schemas.UserUpdate(**current_user_data)
@@ -99,7 +100,7 @@ async def create_user_open(
     full_name: str = Body(None),
 ) -> Any:
     """
-    Create new user without the need to be logged in.
+    Registration for basic users.
     """
     if not settings.USERS_OPEN_REGISTRATION:
         raise HTTPException(
@@ -126,7 +127,7 @@ async def read_user_by_id(
     session: AsyncSession = Depends(get_async_session),
 ) -> Any:
     """
-    Get a specific user by the ID.
+    Get specific user by the ID.
     """
     user = await crud.user.get(session, id=user_id)
     if user == current_user:
@@ -147,7 +148,7 @@ async def update_user(
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Update a user.
+    Update specific user with the ID provided.
     """
     user = await crud.user.get(session, id=user_id)
     if not user:
